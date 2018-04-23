@@ -1,0 +1,67 @@
+<template>
+  <div style='margin-top:200px'>
+    <el-row>
+      <!-- 根据屏幕大小设置登录大小 -->
+      <el-col :offset='div_offset' :span='div_span'>
+        <el-card class='box-card'>
+          <div slot='header'>
+            <span>SANDMAN LOGIN</span>
+          </div>
+          <div id='login' class='login_div'>
+            <el-form ref='form' label-width='60px' label-position='right' label-suffix=':'>
+              <el-form-item label='用户名'>
+                <el-input v-model='username' type="string"></el-input>
+              </el-form-item>
+              <el-form-item label='密码'>
+                <el-input v-model='password' type='password'></el-input>
+              </el-form-item>
+            </el-form>
+            <el-row type='flex' justify='center'>
+              <el-button type='primary' @click='login' style='width: 250px'>登录</el-button>
+            </el-row>
+            <el-row type='flex' justify='end'>
+              <a @click='forgetPasswd'>忘记密码</a>
+              <a @click='toRegister'>注册</a>
+            </el-row>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    login () {
+      this.$http.post('/api/sandman/v1/LoginResource/login', { username: this.username, password: this.password }).then((successData) => {
+        alert(JSON.stringify(successData))
+      }, (errorData) => {
+        alert(JSON.stringify(errorData))
+      })
+    },
+    forgetPasswd () {
+      alert('联系管理员吧')
+    },
+    toRegister () {
+      this.$router.push('/register')
+    }
+  },
+  data () {
+    return {
+      // 样式值
+      div_offset: 10,
+      div_span: 4,
+      // 数据值
+      password: '',
+      username: ''
+    }
+  },
+  mounted () {
+    if (screen.width < 800) {
+      this.div_offset = 2
+      this.div_span = 20
+    }
+  }
+}
+</script>
