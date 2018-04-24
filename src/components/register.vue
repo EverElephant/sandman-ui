@@ -37,7 +37,7 @@
 export default {
   methods: {
     register () {
-      this.$http.post('/api/sandman/v1/user/createUser', { username: this.username, password: this.password, mobile: this.mobile, email: this.email }).then((successData) => {
+      this.$http.post('/api/sandman/v1/user/createUser', { userName: this.username, password: this.password, mobile: this.mobile, email: this.email }).then((successData) => {
         alert(JSON.stringify(successData))
       }, (errorData) => {
         alert(JSON.stringify(errorData))

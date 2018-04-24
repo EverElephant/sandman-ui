@@ -15,6 +15,7 @@
               <el-form-item label='密码'>
                 <el-input v-model='password' type='password'></el-input>
               </el-form-item>
+              <el-checkbox v-model="rememberMe">一周内记住我</el-checkbox>
             </el-form>
             <el-row type='flex' justify='center'>
               <el-button type='primary' @click='login' style='width: 250px'>登录</el-button>
@@ -34,8 +35,8 @@
 export default {
   methods: {
     login () {
-      this.$http.post('/api/sandman/v1/LoginResource/login', { username: this.username, password: this.password }).then((successData) => {
-        alert(JSON.stringify(successData))
+      this.$http.post('/api/sandman/v1/user/login', 'username=' + this.username + '&password=' + this.password + '&rememberMe=' + this.rememberMe).then((successData) => {
+        this.$router.push('/main')
       }, (errorData) => {
         alert(JSON.stringify(errorData))
       })
@@ -54,7 +55,8 @@ export default {
       div_span: 4,
       // 数据值
       password: '',
-      username: ''
+      username: '',
+      rememberMe: ''
     }
   },
   mounted () {

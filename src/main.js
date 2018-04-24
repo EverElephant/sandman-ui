@@ -10,8 +10,15 @@ import axios from 'axios'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.prototype.$http = axios
-axios.defaults.baseURL = 'http://39.104.80.30:8081'
+// axios.defaults.baseURL = 'http://39.104.80.30:8081'
+axios.defaults.baseURL = 'http://localhost:8081'
 axios.defaults.withCredentials = true
+axios.interceptors.response.use((success) => {
+  return success
+}, (error) => {
+  alert(JSON.stringify(error))
+  this.router.push('/login')
+})
 
 /* eslint-disable no-new */
 new Vue({
