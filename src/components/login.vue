@@ -5,7 +5,7 @@
       <el-col :offset='div_offset' :span='div_span'>
         <el-card class='box-card'>
           <div slot='header'>
-            <span>SANDMAN LOGIN</span>
+            <span>SANDMAN 登录</span>
           </div>
           <div id='login' class='login_div'>
             <el-form ref='form' label-width='60px' label-position='right' label-suffix=':'>
@@ -35,10 +35,10 @@
 export default {
   methods: {
     login () {
-      this.$http.post('/api/sandman/v1/user/login', 'username=' + this.username + '&password=' + this.password + '&rememberMe=' + this.rememberMe).then((successData) => {
-        this.$router.push('/main')
-      }, (errorData) => {
-        alert(JSON.stringify(errorData))
+      this.$http.post('/test/login', 'username=' + this.username + '&password=' + this.password + '&rememberMe=' + this.rememberMe).then((successData) => {
+        if (successData) {
+          this.$router.push('/main')
+        }
       })
     },
     forgetPasswd () {
@@ -56,7 +56,7 @@ export default {
       // 数据值
       password: '',
       username: '',
-      rememberMe: ''
+      rememberMe: false
     }
   },
   mounted () {
@@ -64,6 +64,11 @@ export default {
       this.div_offset = 2
       this.div_span = 20
     }
+    this.$http.get('/api/sandman/v1/user/getCurUserInfo').then((response) => {
+      if (response) {
+        this.$router.push('/main')
+      }
+    })
   }
 }
 </script>

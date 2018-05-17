@@ -5,7 +5,7 @@
       <el-col :offset='div_offset' :span='div_span'>
         <el-card class='box-card'>
           <div slot='header'>
-            <span>SANDMAN LOGIN</span>
+            <span>SANDMAN 注册</span>
           </div>
           <div id='login' class='login_div'>
             <el-form ref='form' label-width='60px' label-position='right' label-suffix=':'>
@@ -19,7 +19,13 @@
                 <el-input v-model='mobile' type='number'></el-input>
               </el-form-item>
               <el-form-item label='邮箱'>
-                <el-input v-model='email' type='text'></el-input>
+                <el-row>
+                  <el-col :span='16'><el-input v-model='email' type='text'></el-input></el-col>
+                  <el-col :span='8'><el-button @click="send_mail">发送验证码</el-button></el-col>
+                </el-row>
+              </el-form-item>
+              <el-form-item label='验证码'>
+                <el-input v-model='validateCode' type="text"></el-input>
               </el-form-item>
             </el-form>
             <el-row type='flex' justify='center'>
@@ -37,26 +43,31 @@
 export default {
   methods: {
     register () {
-      this.$http.post('/api/sandman/v1/user/createUser', { userName: this.username, password: this.password, mobile: this.mobile, email: this.email }).then((successData) => {
-        alert(JSON.stringify(successData))
-      }, (errorData) => {
-        alert(JSON.stringify(errorData))
+      this.$http.post('/api/sandman/v1/user/createUser', { userName: this.username, password: this.password, mobile: this.mobile, email: this.email, validateCode: this.validateCode }).then((successData) => {
+        alert('注册成功')
+        this.$router.push('/login')
       })
     },
     goBack () {
       this.$router.go(-1)
+    },
+    send_mail () {
+      this.$http.post('/api/sandman/v1/user/createUser', { contact: this.email }).then((successData) => {
+        alert('发送成功')
+      })
     }
   },
   data () {
     return {
       // 样式值
-      div_offset: 10,
-      div_span: 4,
+      div_offset: 8,
+      div_span: 8,
       // 数据值
       password: '',
       username: '',
       mobile: '',
-      email: ''
+      email: '',
+      validateCode: ''
     }
   },
   mounted () {
