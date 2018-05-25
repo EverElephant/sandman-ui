@@ -43,14 +43,7 @@ export default {
             confirmButtonText: '确定',
             center: true,
             type: 'error',
-            closeOnPressEscape: true,
-            callback: action => {
-              this.$message({
-                center: true,
-                type: 'error',
-                message: '请重新登录!'
-              })
-            }
+            closeOnPressEscape: true
           })
           return // 请求登录接口返回code!=200,停留在本页面提示用户重新登录
         }

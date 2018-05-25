@@ -1,5 +1,5 @@
 <template>
-  <div style='margin-top:200px'>
+  <div style='margin-top:8em'>
     <el-row>
       <!-- 根据屏幕大小设置大小 -->
       <el-col :offset='div_offset' :span='div_span'>
@@ -20,8 +20,11 @@
               </el-form-item>
               <el-form-item label='邮箱'>
                 <el-row>
-                  <el-col :span='16'><el-input v-model='email' type='text'></el-input></el-col>
-                  <el-col :span='8'><el-button @click="send_mail">发送验证码</el-button></el-col>
+                  <el-col :span='24'>
+                    <el-input v-model='email' type='text'>
+                      <el-button v-bind:disabled="emailBtnDisable" slot="append" @click="send_mail">{{sendEmail}}</el-button>
+                    </el-input>
+                  </el-col>
                 </el-row>
               </el-form-item>
               <el-form-item label='验证码'>
@@ -51,18 +54,74 @@ export default {
     goBack () {
       this.$router.go(-1)
     },
-    send_mail () {
-      this.$http.post('/api/sandman/v1/user/createUser', { contact: this.email }).then((successData) => {
-        alert('发送成功')
+    send_mail () { // 向email发送注册验证码
+      if (!this.correctEmail(this.email)) { // 校验email的正确性，正确则发送验证码，不正确则提示并return
+        this.alertError('请输入正确的电子邮箱地址', '邮箱地址不正确')
+        return
+      }
+      // 验证电子邮箱地址是否被其他用户绑定,未被绑定才发送验证码
+      let unused = this.emailUnused(this.email) // 0:未传入联系方式；1:联系方式已经被绑定；2:联系方式未被绑定
+      if (unused) { // 邮箱未被其他用户绑定
+        // 如果email校验通过，就开启倒计时并发送验证码
+        this.setTime()
+        this.$http.post('/api/sandman/v1/validateCode/sendValidateCode', { contact: this.email }) // 发送验证码，不需要回调函数
+      }
+    },
+    emailUnused (email) { // 验证邮箱是否未被使用，未被使用返回true，否则返回false
+      let exist
+      this.$http.get('/api/sandman/v1/user/contactExist?contact=' + this.email).then((response) => { // 发送验证码，不需要回调函数
+        exist = response.data.exist
+        if (exist === 0 || exist === undefined) {
+          this.alertError('请输入正确的电子邮箱地址', '邮箱地址有误')
+          return false
+        } else if (exist === 1) {
+          this.alertError('该邮箱已经被其他账号绑定,请重新输入电子邮箱地址', '该邮箱已经被绑定')
+          return false
+        }
+        return true
       })
+    },
+    setTime () { // 邮件发送倒计时
+      var sec = 60
+      var self = this
+      var interval = setInterval(function () {
+        sec--
+        if (sec > 0) {
+          self.sendEmail = sec + '秒后重发'
+          self.emailBtnDisable = true
+        } else {
+          clearInterval(interval)
+          self.sendEmail = '发送验证码'
+          self.emailBtnDisable = false
+        }
+      }, 1000)
+    },
+    alertError (message, title) { // 输出错误信息
+      this.$alert(message, title, { // 第一个参数是内容，第二个参数是标题
+        confirmButtonText: '确定',
+        center: true,
+        type: 'error',
+        closeOnPressEscape: true
+      })
+    },
+    correctEmail (email) { // email校验，正确的email返回true，否则返回false
+      var emailRegex = '^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$'
+      if (email.search(emailRegex)) {
+        return false
+      }
+      return true
     }
   },
   data () {
     return {
+      // js数据值
+      // countdown: 60,
       // 样式值
       div_offset: 8,
       div_span: 8,
       // 数据值
+      emailBtnDisable: false,
+      sendEmail: '发送验证码',
       password: '',
       username: '',
       mobile: '',
