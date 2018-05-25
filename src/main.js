@@ -24,19 +24,33 @@ var errorMap = {
   408: '资源不存在',
   409: '用户名已存在',
   410: '请勿重复上传',
-  411: '用户名密码错误'
+  411: '用户名密码错误',
+  412: '单个文件最大220MB',
+  413: '请先填写联系方式',
+  414: '邮件验证码发送失败',
+  415: '创建用户你带什么ID啊',
+  416: '请先填写验证码',
+  417: '验证码不正确',
+  418: '未发送验证码或验证码已过期',
+  419: '用户未登录',
+  420: '资源积分必填',
+  421: '资源描述必须10个字符以上',
+  422: '无数据',
+  423: '用户不存在'
 }
 axios.interceptors.response.use((success) => {
   if (success.data.code !== 200) {
-    alert(success.data.code)
-    alert(errorMap[success.data.code])
-    return null
+    // alert(success.data.code)
+    // alert(errorMap[success.data.code])
+    console.error(errorMap[success.data.code])
+    return success
   } else {
     return success
   }
 }, (error) => {
-  alert(JSON.stringify(error))
-  alert('服务器错误')
+  // alert(JSON.stringify(error))
+  // alert('服务器错误')
+  console.error(JSON.stringify(error))
   return null
 })
 
