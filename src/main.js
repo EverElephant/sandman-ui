@@ -6,9 +6,10 @@ import router from './router'
 import ElementUI from 'element-ui'
 import message from './common/message'
 import globalObj from './common/globalObj'
+import header from './components/header/header'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
-
+Vue.component('sandman-header', header)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.prototype.globalObj_ = globalObj
