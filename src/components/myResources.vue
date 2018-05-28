@@ -14,22 +14,22 @@
       <el-menu-item index="upload">上传资源</el-menu-item>
       <el-menu-item index="download">已下载</el-menu-item>
       <el-menu-item index="gold">积分明细</el-menu-item>
-      <el-menu-item v-if="!isLogin" index="login">{{userName}}</el-menu-item>
+      <el-menu-item v-if="!isLogin" index="login">登录</el-menu-item>
       <el-menu-item index="register">注册</el-menu-item>
     </el-menu>
     <!-- 搜索栏 -->
-    <el-row>
-      <!--<el-input v-model="search"></el-input>-->
+<!--    <el-row>
+      &lt;!&ndash;<el-input v-model="search"></el-input>&ndash;&gt;
       <el-form ref='form' :inline="true" label-width='60px' label-position='right' label-suffix=':'>
         <el-form-item>
           <el-input v-model="search" placeholder="搜索资源关键词" clearable>
-            <el-button slot="append" type="primary" @click="queryResource" icon="el-icon-search"></el-button>
+            <el-button slot="append" type="primary" @click="queryMyResource" icon="el-icon-search"></el-button>
           </el-input>
         </el-form-item>
       </el-form>
-    </el-row>
+    </el-row>-->
     <!-- 数据table -->
-    <el-table :data="tableData" size="medium">
+    <el-table :data="tableData" style="width: 100%">
       <el-table-column fixed="left" prop="id" label="ID" align="center"></el-table-column>
       <el-table-column prop="resName" label="名称" align="center"></el-table-column>
       <el-table-column prop="resDesc" label="描述" align="center"></el-table-column>
@@ -60,8 +60,17 @@
 <script>
 export default {
   methods: {
-    queryResource () {
-      this.$http.get('/api/sandman/v1/resource/getManyResourcesByFuzzy?pageNumber=' + this.currentPage + '&size=' + this.pageSize + '&search=' + this.search).then((successData) => {
+    queryMyResource () {
+      this.$http.get('/api/sandman/v1/resource/getAllMyResources?pageNumber=' + this.currentPage + '&size=' + this.pageSize).then((successData) => {
+        if (successData.data.code !== 200) { // 如果查询code不是200
+          this.$alert(successData.data.message, '错误代码' + successData.data.code, { // 第一个参数是内容，第二个参数是标题
+            confirmButtonText: '确定',
+            center: true,
+            type: 'error',
+            closeOnPressEscape: true
+          })
+          return
+        }
         var resources = successData.data.data.resourceList
         for (var i = 0; i < resources.length; i++) {
           // 将资源大小格式化成合适的数量级
@@ -112,7 +121,7 @@ export default {
   },
   data () {
     return {
-      activeIndex: 'main', // 初始化时menu的active
+      activeIndex: 'myResources', // 初始化时menu的active
       // 样式值
       div_offset: 1,
       div_span: 22,
@@ -125,12 +134,10 @@ export default {
       // 用户信息
       isLogin: false, // 是否已经登录，初始化时没有登录
       userName: '登录'
-      // 搜索框内容设置
-
     }
   },
   mounted () {
-    this.queryResource()
+    this.queryMyResource()
     if (screen.width < 800) {
       this.div_offset = 2
       this.div_span = 20
