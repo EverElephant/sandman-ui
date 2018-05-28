@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
+import message from './common/message'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 
@@ -40,17 +41,13 @@ var errorMap = {
 }
 axios.interceptors.response.use((success) => {
   if (success.data.code !== 200) {
-    // alert(success.data.code)
-    // alert(errorMap[success.data.code])
-    console.error(errorMap[success.data.code])
+    message.errorMsg('错误代码:' + success.data.code, success.data.message) // elementUI的弹框
     return success
   } else {
     return success
   }
 }, (error) => {
-  // alert(JSON.stringify(error))
-  // alert('服务器错误')
-  console.error(JSON.stringify(error))
+  message.errorMsg('服务器错误', JSON.stringify(error))
   return null
 })
 

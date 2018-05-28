@@ -38,13 +38,6 @@ export default {
     login () {
       this.$http.post('/api/sandman/v1/user/login', 'username=' + this.username + '&password=' + this.password + '&rememberMe=' + this.rememberMe).then((successData) => {
         if (successData.data.code !== 200) {
-          // alert('返回的code！=200')
-          this.$alert(successData.data.message, '错误代码' + successData.data.code, { // 第一个参数是内容，第二个参数是标题
-            confirmButtonText: '确定',
-            center: true,
-            type: 'error',
-            closeOnPressEscape: true
-          })
           return // 请求登录接口返回code!=200,停留在本页面提示用户重新登录
         }
         if (successData) { // 登录成功跳转到首页

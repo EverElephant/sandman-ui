@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import message from '../common/message'
+import verify from '../common/verify'
 export default {
   methods: {
     register () {
@@ -55,8 +57,8 @@ export default {
       this.$router.go(-1)
     },
     send_mail () { // 向email发送注册验证码
-      if (!this.correctEmail(this.email)) { // 校验email的正确性，正确则发送验证码，不正确则提示并return
-        this.alertError('请输入正确的电子邮箱地址', '邮箱地址不正确')
+      if (!verify.correctEmail(this.email)) { // 校验email的正确性，正确则发送验证码，不正确则提示并return
+        message.errorMsg('邮箱地址不正确', '请输入正确的电子邮箱地址')
         return
       }
       // 验证电子邮箱地址是否被其他用户绑定,未被绑定才发送验证码
@@ -71,14 +73,11 @@ export default {
       let exist
       this.$http.get('/api/sandman/v1/user/contactExist?contact=' + this.email).then((response) => { // 发送验证码，不需要回调函数
         exist = response.data.exist
-        if (exist === 0 || exist === undefined) {
-          this.alertError('请输入正确的电子邮箱地址', '邮箱地址有误')
-          return false
-        } else if (exist === 1) {
-          this.alertError('该邮箱已经被其他账号绑定,请重新输入电子邮箱地址', '该邮箱已经被绑定')
+        if (exist !== undefined && exist === 2) {
+          return true
+        } else {
           return false
         }
-        return true
       })
     },
     setTime () { // 邮件发送倒计时
@@ -95,21 +94,6 @@ export default {
           self.emailBtnDisable = false
         }
       }, 1000)
-    },
-    alertError (message, title) { // 输出错误信息
-      this.$alert(message, title, { // 第一个参数是内容，第二个参数是标题
-        confirmButtonText: '确定',
-        center: true,
-        type: 'error',
-        closeOnPressEscape: true
-      })
-    },
-    correctEmail (email) { // email校验，正确的email返回true，否则返回false
-      var emailRegex = '^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$'
-      if (email.search(emailRegex)) {
-        return false
-      }
-      return true
     }
   },
   data () {

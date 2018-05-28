@@ -63,12 +63,6 @@ export default {
     queryMyResource () {
       this.$http.get('/api/sandman/v1/resource/getAllMyResources?pageNumber=' + this.currentPage + '&size=' + this.pageSize).then((successData) => {
         if (successData.data.code !== 200) { // 如果查询code不是200
-          this.$alert(successData.data.message, '错误代码' + successData.data.code, { // 第一个参数是内容，第二个参数是标题
-            confirmButtonText: '确定',
-            center: true,
-            type: 'error',
-            closeOnPressEscape: true
-          })
           return
         }
         var resources = successData.data.data.resourceList

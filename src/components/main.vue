@@ -14,8 +14,10 @@
       <el-menu-item index="upload">上传资源</el-menu-item>
       <el-menu-item index="download">已下载</el-menu-item>
       <el-menu-item index="gold">积分明细</el-menu-item>
-      <el-menu-item v-if="!isLogin" index="login">{{userName}}</el-menu-item>
-      <el-menu-item index="register">注册</el-menu-item>
+      <el-menu-item v-if="!isLogin" style="float: right" index="register">注册</el-menu-item>
+      <el-menu-item v-if="!isLogin" style="float: right" index="login">登录</el-menu-item>
+      <el-menu-item v-if="isLogin" style="float: right" index="register">退出</el-menu-item>
+      <el-menu-item v-if="isLogin" style="float: right" index="login">userName</el-menu-item>
     </el-menu>
     <!-- 搜索栏 -->
     <el-row>
@@ -29,7 +31,7 @@
       </el-form>
     </el-row>
     <!-- 数据table -->
-    <el-table :data="tableData" size="medium">
+    <el-table :data="tableData">
       <el-table-column fixed="left" prop="id" label="ID" align="center"></el-table-column>
       <el-table-column prop="resName" label="名称" align="center"></el-table-column>
       <el-table-column prop="resDesc" label="描述" align="center"></el-table-column>
@@ -102,7 +104,6 @@ export default {
       this.queryResource()
     },
     handleSelect (key, keyPath) {
-      console.info(key + '/////' + keyPath)
       this.$router.push('/' + key)
     },
     download (id) {
@@ -123,7 +124,7 @@ export default {
       pageSize: 10,
       totalSize: 0,
       // 用户信息
-      isLogin: false, // 是否已经登录，初始化时没有登录
+      isLogin: true, // 是否已经登录，初始化时没有登录
       userName: '登录'
       // 搜索框内容设置
 
