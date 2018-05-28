@@ -14,18 +14,44 @@
       <el-menu-item index="upload">上传资源</el-menu-item>
       <el-menu-item index="download">已下载</el-menu-item>
       <el-menu-item index="gold">积分明细</el-menu-item>
-      <el-menu-item v-if="!isLogin" index="login">登录</el-menu-item>
-      <el-menu-item index="register">注册</el-menu-item>
+      <el-menu-item v-if="!isLogin" style="float: right" index="register">注册</el-menu-item>
+      <el-menu-item v-if="!isLogin" style="float: right" index="login">登录</el-menu-item>
+      <el-menu-item v-if="isLogin" style="float: right" index="logout">{{this.globalObj_.userName}}</el-menu-item>
     </el-menu>
   </div>
 </template>
 
 <script>
 export default {
+  methods: {
+    handleSelect (key, keyPath) {
+      console.error(key)
+      if (key === 'logout') {
+        this.$http.get('/api/sandman/v1/user/logout')
+        this.globalObj_.userName = ''
+        this.globalObj_.isLogin = false
+        this.userName = ''
+        this.isLogin = false
+        this.activeIndex = 'main'
+        this.$router.push('/main')
+        return
+      }
+      this.activeIndex = key
+      this.$router.push('/' + key)
+    }
+  },
   data () {
     return {
-      isLogin: false
+      activeIndex: 'main', // 初始化时menu的active
+      isLogin: false,
+      userName: '',
+      password: ''
     }
+  },
+  mounted () {
+    this.userName = this.globalObj_.userName
+    this.password = this.globalObj_.password
+    this.isLogin = this.globalObj_.isLogin
   }
 }
 </script>

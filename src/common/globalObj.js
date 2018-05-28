@@ -1,6 +1,8 @@
-const userName = 'sunpeikai'
-const password = 'spkzq521'
+const userName = ''
+const password = ''
+const isLogin = ''
 export default {
   userName,
-  password
+  password,
+  isLogin
 }

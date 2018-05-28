@@ -41,6 +41,9 @@ export default {
           return // 请求登录接口返回code!=200,停留在本页面提示用户重新登录
         }
         if (successData) { // 登录成功跳转到首页
+          this.globalObj_.userName = this.username
+          this.globalObj_.isLogin = true
+          console.info(this.globalObj_.userName)
           this.$router.push('/main')
         }
       })

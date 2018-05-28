@@ -18,14 +18,7 @@ export default new Router({
     }, {
       path: '/main',
       name: 'main',
-      component: main,
-      children: [
-        {
-          path: '/download',
-          name: 'download',
-          component: download
-        }
-      ]
+      component: main
     }, {
       path: '/login',
       name: 'login',
@@ -39,6 +32,11 @@ export default new Router({
       path: '/upload',
       name: 'upload',
       component: upload
+    },
+    {
+      path: '/download',
+      name: 'download',
+      component: download
     },
     {
       path: '/myResources',

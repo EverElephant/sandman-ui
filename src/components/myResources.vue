@@ -1,33 +1,7 @@
 <template>
   <div>
     <!-- 头部菜单栏 -->
-    <el-menu
-      :default-active="activeIndex"
-      class="el-menu"
-      mode="horizontal"
-      @select="handleSelect"
-      background-color="#545c64"
-      text-color="#fff"
-      active-text-color="#ffd04b">
-      <el-menu-item index="main">首页</el-menu-item>
-      <el-menu-item index="myResources">我的资源</el-menu-item>
-      <el-menu-item index="upload">上传资源</el-menu-item>
-      <el-menu-item index="download">已下载</el-menu-item>
-      <el-menu-item index="gold">积分明细</el-menu-item>
-      <el-menu-item v-if="!isLogin" index="login">登录</el-menu-item>
-      <el-menu-item index="register">注册</el-menu-item>
-    </el-menu>
-    <!-- 搜索栏 -->
-<!--    <el-row>
-      &lt;!&ndash;<el-input v-model="search"></el-input>&ndash;&gt;
-      <el-form ref='form' :inline="true" label-width='60px' label-position='right' label-suffix=':'>
-        <el-form-item>
-          <el-input v-model="search" placeholder="搜索资源关键词" clearable>
-            <el-button slot="append" type="primary" @click="queryMyResource" icon="el-icon-search"></el-button>
-          </el-input>
-        </el-form-item>
-      </el-form>
-    </el-row>-->
+    <sandman-header></sandman-header>
     <!-- 数据table -->
     <el-table :data="tableData" style="width: 100%">
       <el-table-column fixed="left" prop="id" label="ID" align="center"></el-table-column>
@@ -58,6 +32,7 @@
   </div>
 </template>
 <script>
+import globalMethods from '../common/globalMethods'
 export default {
   methods: {
     queryMyResource () {
@@ -69,32 +44,12 @@ export default {
         for (var i = 0; i < resources.length; i++) {
           // 将资源大小格式化成合适的数量级
           var resSize = resources[i].resSize
-          resources[i].resSize = this.formatResSize(resSize)
+          resources[i].resSize = globalMethods.formatResSize(resSize)
         }
         this.tableData = successData.data.data.resourceList
         this.totalSize = successData.data.data.totalRow
         this.currentPage = successData.data.data.currentPage
       })
-    },
-    formatResSize (resSize) {
-      let sizeMap = {
-        0: 'B',
-        1: 'KB',
-        2: 'MB',
-        3: 'GB'
-      }
-      let sizeUnit = ''
-      let mapKey = 0
-      var size = resSize
-      while (size > 1) { // size>1，进入循环，得到下一个数量级,例如1025MB = 1GB
-        mapKey++
-        size = size / 1024
-      }
-      // size<1，则跳出循环。此时数量级为 0.999GB，稍后进行处理
-      sizeUnit = sizeMap[ mapKey - 1 ] // 获取到静态代码块中put进去的值。
-      size *= 1024 // 进入上一个数量级，得到一个合适的数量级，999MB 而非0.999GB
-      size = size.toFixed(2) // js的四舍五入，保留两位小数
-      return size + sizeUnit
     },
     handleSizeChange (val) {
       this.pageSize = val
@@ -124,10 +79,8 @@ export default {
       tableData: [],
       currentPage: 1,
       pageSize: 10,
-      totalSize: 0,
+      totalSize: 0
       // 用户信息
-      isLogin: false, // 是否已经登录，初始化时没有登录
-      userName: '登录'
     }
   },
   mounted () {
