@@ -5,11 +5,13 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import message from './common/message'
+import globalObj from './common/globalObj'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axios'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
+Vue.prototype.globalObj_ = globalObj
 Vue.prototype.$http = axios
 // axios.defaults.baseURL = 'http://39.104.80.30:8081'
 axios.defaults.baseURL = 'http://localhost:8081'

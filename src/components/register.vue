@@ -106,14 +106,13 @@ export default {
       // 数据值
       emailBtnDisable: false,
       sendEmail: '发送验证码',
-      password: '',
-      username: '',
       mobile: '',
       email: '',
       validateCode: ''
     }
   },
   mounted () {
+    alert('userName=' + this.globalObj_.userName + ';password=' + this.globalObj_.password)
     if (screen.width < 800) {
       this.div_offset = 2
       this.div_span = 20
