@@ -41,6 +41,7 @@ var errorMap = {
 }
 axios.interceptors.response.use((success) => {
   if (success.data.code !== 200) {
+    console.info(errorMap[success.data.code])
     message.errorMsg('错误代码:' + success.data.code, success.data.message) // elementUI的弹框
     return success
   } else {

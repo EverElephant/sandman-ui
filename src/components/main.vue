@@ -17,7 +17,7 @@
       <el-menu-item v-if="!isLogin" style="float: right" index="register">注册</el-menu-item>
       <el-menu-item v-if="!isLogin" style="float: right" index="login">登录</el-menu-item>
       <el-menu-item v-if="isLogin" style="float: right" index="register">退出</el-menu-item>
-      <el-menu-item v-if="isLogin" style="float: right" index="login">userName</el-menu-item>
+      <el-menu-item v-if="isLogin" style="float: right" index="logout">userName</el-menu-item>
     </el-menu>
     <!-- 搜索栏 -->
     <el-row>
@@ -104,10 +104,13 @@ export default {
       this.queryResource()
     },
     handleSelect (key, keyPath) {
+      if (key === 'logout') {
+        this.$http.get('/api/sandman/v1/user/logout')
+        this.$router.push('/main')
+      }
       this.$router.push('/' + key)
     },
     download (id) {
-      console.info(this.$http.defaults.baseURL + '/api/sandman/v1/resource/downloadResource?id=' + id)
       window.open(this.$http.defaults.baseURL + '/api/sandman/v1/resource/downloadResource?id=' + id)
     }
   },
