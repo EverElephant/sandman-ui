@@ -32,11 +32,15 @@
 </template>
 
 <script>
+// import ElementUI from 'element-ui'
 export default {
   methods: {
     login () {
-      this.$http.post('/test/login', 'username=' + this.username + '&password=' + this.password + '&rememberMe=' + this.rememberMe).then((successData) => {
-        if (successData) {
+      this.$http.post('/api/sandman/v1/user/login', 'username=' + this.username + '&password=' + this.password + '&rememberMe=' + this.rememberMe).then((successData) => {
+        if (successData.data.code !== 200) {
+          return // 请求登录接口返回code!=200,停留在本页面提示用户重新登录
+        }
+        if (successData) { // 登录成功跳转到首页
           this.$router.push('/main')
         }
       })
@@ -65,10 +69,12 @@ export default {
       this.div_span = 20
     }
     this.$http.get('/api/sandman/v1/user/getCurUserInfo').then((response) => {
+      // alert(response)
       if (response) {
         this.$router.push('/main')
       }
     })
   }
 }
+
 </script>

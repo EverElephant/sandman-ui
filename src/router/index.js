@@ -5,7 +5,7 @@ import login from '@/components/login'
 import register from '@/components/register'
 import upload from '@/components/upload'
 import download from '@/components/download'
-
+import myResources from '@/components/myResources'
 Vue.use(Router)
 
 export default new Router({
@@ -21,11 +21,6 @@ export default new Router({
       component: main,
       children: [
         {
-          path: '/upload',
-          name: 'upload',
-          component: upload
-        },
-        {
           path: '/download',
           name: 'download',
           component: download
@@ -39,6 +34,16 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: register
+    },
+    {
+      path: '/upload',
+      name: 'upload',
+      component: upload
+    },
+    {
+      path: '/myResources',
+      name: 'myResources',
+      component: myResources
     }
   ]
 })
