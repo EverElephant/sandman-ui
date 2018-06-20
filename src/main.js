@@ -15,7 +15,7 @@ Vue.use(ElementUI)
 Vue.prototype.globalObj_ = globalObj
 Vue.prototype.$http = axios
 // axios.defaults.baseURL = 'http://39.104.80.30:8081'
-axios.defaults.baseURL = 'http://localhost:8081'
+axios.defaults.baseURL = 'http://localhost:8082'
 axios.defaults.withCredentials = true
 var errorMap = {
   401: '上传文件为空',
@@ -43,8 +43,8 @@ var errorMap = {
   423: '用户不存在'
 }
 axios.interceptors.response.use((success) => {
-  if (success.data.code !== 200) {
-    console.info(errorMap[success.data.code])
+  console.info('错误代码:' + success.data.code + ';错误信息:' + errorMap[success.data.code])
+  if (success.data.code !== 200 && success.data.code !== 419) {
     message.errorMsg('错误代码:' + success.data.code, success.data.message) // elementUI的弹框
     return success
   } else {

@@ -6,7 +6,6 @@ import register from '@/components/register'
 import upload from '@/components/upload'
 import download from '@/components/download'
 import myResources from '@/components/myResources'
-import wangeditor from '@/components/wangeditor'
 Vue.use(Router)
 
 export default new Router({
@@ -43,11 +42,6 @@ export default new Router({
       path: '/myResources',
       name: 'myResources',
       component: myResources
-    },
-    {
-      path: '/wangeditor',
-      name: 'wangeditor',
-      component: wangeditor
     }
   ]
 })
